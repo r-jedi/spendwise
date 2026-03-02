@@ -7,24 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0e0c;
-    --surface: #1a1916;
-    --surface2: #252420;
-    --surface3: #2f2d28;
-    --gold: #c9a84c;
-    --gold-light: #e2c77a;
-    --cream: #f0e8d8;
-    --danger: #e05c4b;
-    --danger-bg: #2a1a17;
-    --success: #6bab7e;
-    --border: rgba(201,168,76,0.15);
-    --text: #f0e8d8;
-    --text-muted: #8a8070;
+    --bg: #0f0e0c; --surface: #1a1916; --surface2: #252420; --surface3: #2f2d28;
+    --gold: #c9a84c; --gold-light: #e2c77a; --cream: #f0e8d8;
+    --danger: #e05c4b; --danger-bg: #2a1a17; --success: #6bab7e;
+    --border: rgba(201,168,76,0.15); --text: #f0e8d8; --text-muted: #8a8070;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
   body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.4; }
-
   .app { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:0 0 100px; }
 
   header { padding:32px 24px 20px; border-bottom:1px solid var(--border); }
@@ -109,8 +99,7 @@
   .nav-btn.active { color:var(--gold); }
   .nav-icon { font-size:20px; line-height:1; }
 
-  .page { display:none; }
-  .page.active { display:block; }
+  .page { display:none; } .page.active { display:block; }
 
   .settings-page { padding:24px; }
   .settings-header { font-family:'DM Serif Display',serif; font-size:28px; color:var(--cream); margin-bottom:8px; }
@@ -249,7 +238,7 @@
       <div class="settings-sub">Configure your monthly budget and currency</div>
       <div class="info-box">
         <strong>☁ Google Sheets sync active.</strong><br>
-        Every entry is automatically saved to your Google Sheet. Your data is available on any device.
+        Every entry is automatically saved to your Google Sheet and available on any device.
       </div>
       <div class="field-group">
         <label class="field-label">Currency Symbol</label>
@@ -272,16 +261,11 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <div class="bottom-nav">
-  <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')">
-    <span class="nav-icon">◈</span>Dashboard
-  </button>
-  <button class="nav-btn" id="nav-settings" onclick="showPage('settings')">
-    <span class="nav-icon">⚙</span>Settings
-  </button>
+  <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')"><span class="nav-icon">◈</span>Dashboard</button>
+  <button class="nav-btn" id="nav-settings" onclick="showPage('settings')"><span class="nav-icon">⚙</span>Settings</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -296,10 +280,7 @@
     <div class="drawer-body">
       <div class="date-native-wrap">
         <div class="date-chip" id="date-chip">
-          <div>
-            <div class="date-chip-label">Date</div>
-            <div class="date-chip-val" id="date-chip-val">—</div>
-          </div>
+          <div><div class="date-chip-label">Date</div><div class="date-chip-val" id="date-chip-val">—</div></div>
           <span class="date-chip-icon">📅</span>
         </div>
         <input class="date-native" type="date" id="drawer-date" onchange="onDrawerDateChange()">
@@ -331,6 +312,8 @@
 
 <script>
 // ── CONFIG ──
+// All requests use GET with ?payload=... to avoid CORS issues entirely.
+// Google Apps Script handles GET requests without CORS restrictions.
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6v8gclHncN0u-kukN-SlFfUdR7x5znK0NYAdlpVF2LBIUSUd0URES5jgGUUqGj3NP9w/exec';
 const STORAGE_KEY = 'spendwise_v3';
 
@@ -341,73 +324,63 @@ function saveLocal() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 
 // ── SYNC STATUS ──
 function setSyncStatus(status, text) {
-  const pill=document.getElementById('sync-pill');
-  pill.className='sync-pill '+status;
-  document.getElementById('sync-text').textContent=text;
+  document.getElementById('sync-pill').className = 'sync-pill ' + status;
+  document.getElementById('sync-text').textContent = text;
 }
 
-// ── GOOGLE SHEETS — uses GET with payload param to avoid CORS ──
-async function sheetGet(payload) {
+// ── ALL SHEET REQUESTS GO VIA GET ──
+// This completely avoids CORS. GET requests to Apps Script always work from browsers.
+async function sheetRequest(payload) {
   const url = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
   const res = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
   return res.json();
-}
-
-async function sheetPost(payload) {
-  // Use no-cors POST for write operations (fire-and-forget),
-  // then verify by re-fetching
-  await fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(payload)
-  });
-  // no-cors means we can't read the response — we trust it worked
-  // (Apps Script always processes valid POST bodies)
-  return { success: true };
 }
 
 async function syncFromSheet() {
   setSyncStatus('syncing', 'Syncing…');
   try {
-    const result = await sheetGet({ action:'getAll' });
+    const result = await sheetRequest({ action: 'getAll' });
     if (result.success) {
       state.entries = {};
-      result.data.forEach(row => {
+      (result.data || []).forEach(row => {
         if (row.date && row.amount !== '' && row.amount !== undefined) {
-          state.entries[row.date] = {
-            amount: parseFloat(row.amount),
-            comment: row.comment || ''
-          };
+          state.entries[row.date] = { amount: parseFloat(row.amount), comment: row.comment || '' };
         }
       });
       saveLocal();
       renderDashboard();
       setSyncStatus('synced', 'Synced');
     } else {
-      throw new Error(result.error || 'Failed');
+      throw new Error(result.error || 'Unknown error');
     }
   } catch(e) {
     setSyncStatus('error', 'Sync failed');
-    showToast('Showing cached data — check your internet connection', true);
+    showToast('Could not reach Google Sheets — showing cached data', true);
+    console.error('Sync error:', e);
   }
 }
 
 async function pushEntry(dateKey, amount, comment) {
   setSyncStatus('syncing', 'Saving…');
   try {
-    await sheetPost({
+    const result = await sheetRequest({
       action: 'save',
       date: dateKey,
       amount: amount,
       comment: comment,
       timestamp: new Date().toISOString()
     });
-    setSyncStatus('synced', 'Synced');
-    return true;
+    if (result.success) {
+      setSyncStatus('synced', 'Synced');
+      return true;
+    } else {
+      throw new Error(result.error || 'Save failed');
+    }
   } catch(e) {
     setSyncStatus('error', 'Save failed');
-    showToast('Saved locally — could not reach Google Sheets', true);
+    showToast('Saved locally — Google Sheets sync failed', true);
+    console.error('Push error:', e);
     return false;
   }
 }
@@ -415,11 +388,12 @@ async function pushEntry(dateKey, amount, comment) {
 async function deleteFromSheet(dateKey) {
   setSyncStatus('syncing', 'Deleting…');
   try {
-    await sheetPost({ action:'delete', date:dateKey });
-    setSyncStatus('synced', 'Synced');
-    return true;
+    const result = await sheetRequest({ action: 'delete', date: dateKey });
+    if (result.success) { setSyncStatus('synced', 'Synced'); return true; }
+    else throw new Error(result.error);
   } catch(e) {
     setSyncStatus('error', 'Delete failed');
+    console.error('Delete error:', e);
     return false;
   }
 }
@@ -510,16 +484,16 @@ async function saveEntry() {
   state.entries[today()]={amount,comment};
   saveLocal(); renderDashboard();
 
-  await pushEntry(today(),amount,comment);
+  const ok=await pushEntry(today(),amount,comment);
   btn.disabled=false; btn.textContent="Save Today's Expense";
-  showToast('✓ Saved to Google Sheets!');
+  if(ok) showToast('✓ Saved to Google Sheets!');
 }
 
 async function deleteEntry(key) {
   openModal('Delete this entry?',`Remove entry for ${key}?`, async ()=>{
     delete state.entries[key]; saveLocal(); renderDashboard();
-    await deleteFromSheet(key);
-    showToast('Entry deleted');
+    const ok=await deleteFromSheet(key);
+    if(ok) showToast('Entry deleted');
   });
 }
 
@@ -575,10 +549,9 @@ async function saveDrawerEntry() {
   state.entries[dateKey]={amount,comment};
   saveLocal(); renderDashboard();
 
-  await pushEntry(dateKey,amount,comment);
+  const ok=await pushEntry(dateKey,amount,comment);
   btn.disabled=false; btn.textContent='Save Entry';
-  closeDrawer();
-  showToast(`✓ Saved for ${dateKey}`);
+  if(ok){ closeDrawer(); showToast(`✓ Saved for ${dateKey}`); }
 }
 
 function closeDrawer(){ document.getElementById('drawer-overlay').classList.remove('show'); }
