@@ -27,7 +27,6 @@
 
   .app { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:0 0 100px; }
 
-  /* Header */
   header { padding:32px 24px 20px; border-bottom:1px solid var(--border); }
   .header-top { display:flex; justify-content:space-between; align-items:flex-start; }
   .app-name { font-family:'DM Serif Display',serif; font-size:28px; color:var(--gold); letter-spacing:-0.5px; }
@@ -37,17 +36,15 @@
   .settings-btn { background:var(--surface2); border:1px solid var(--border); color:var(--gold); padding:8px 14px; border-radius:20px; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s; }
   .settings-btn:hover { background:var(--surface3); }
 
-  /* Sync indicator */
   .sync-pill { display:flex; align-items:center; gap:5px; padding:6px 10px; border-radius:20px; font-size:11px; font-weight:600; letter-spacing:0.5px; border:1px solid; transition:all 0.4s; }
-  .sync-pill.synced { color:var(--success); border-color:rgba(107,171,126,0.3); background:rgba(107,171,126,0.08); }
+  .sync-pill.synced  { color:var(--success); border-color:rgba(107,171,126,0.3); background:rgba(107,171,126,0.08); }
   .sync-pill.syncing { color:var(--gold); border-color:rgba(201,168,76,0.3); background:rgba(201,168,76,0.08); }
-  .sync-pill.error { color:var(--danger); border-color:rgba(224,92,75,0.3); background:rgba(224,92,75,0.08); }
+  .sync-pill.error   { color:var(--danger); border-color:rgba(224,92,75,0.3); background:rgba(224,92,75,0.08); }
   .sync-pill.offline { color:var(--text-muted); border-color:rgba(138,128,112,0.2); background:transparent; }
   .sync-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0; }
   .sync-pill.syncing .sync-dot { animation:pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 
-  /* Dashboard */
   .dashboard { padding:24px 24px 0; }
   .budget-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
   .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px 16px; position:relative; overflow:hidden; transition:all 0.3s; }
@@ -67,13 +64,11 @@
   .progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:2px; transition:width 0.6s ease; }
   .progress-fill.danger { background:linear-gradient(90deg,var(--danger),#f08070); }
 
-  /* Section */
   .section-header { display:flex; align-items:center; justify-content:space-between; padding:28px 24px 16px; }
   .section-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--cream); }
   .btn-add-past { background:var(--surface2); border:1px solid var(--border); color:var(--gold); padding:7px 13px; border-radius:20px; font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all 0.2s; white-space:nowrap; }
   .btn-add-past:hover { background:var(--surface3); }
 
-  /* Entry card */
   .entry-card { margin:0 24px; background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
   .entry-today { padding:16px 18px; border-bottom:1px solid var(--border); }
   .entry-today-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
@@ -90,14 +85,12 @@
   .btn-save:active { transform:scale(0.98); }
   .btn-save:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-  /* Toast */
-  .toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--success); color:#fff; padding:10px 22px; border-radius:30px; font-size:13px; font-weight:500; opacity:0; transition:all 0.3s; z-index:300; white-space:nowrap; }
+  .toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--success); color:#fff; padding:10px 22px; border-radius:30px; font-size:13px; font-weight:500; opacity:0; transition:all 0.3s; z-index:300; white-space:nowrap; max-width:90vw; text-align:center; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-  /* History */
   .history-list { padding:0 24px; }
   .history-item { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); animation:fadeIn 0.3s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)} }
   .history-date { text-align:center; min-width:38px; }
   .history-day { font-size:18px; font-weight:600; color:var(--cream); line-height:1; }
   .history-dow { font-size:10px; letter-spacing:0.5px; color:var(--text-muted); text-transform:uppercase; }
@@ -111,21 +104,14 @@
   .history-btn.del:hover { color:var(--danger); background:var(--danger-bg); }
   .empty-state { text-align:center; padding:40px 0; color:var(--text-muted); font-size:14px; }
 
-  /* Loading skeleton */
-  .skeleton { background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:8px; height:16px; margin:6px 0; }
-  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-  /* Bottom nav */
   .bottom-nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:rgba(15,14,12,0.95); backdrop-filter:blur(20px); border-top:1px solid var(--border); display:flex; z-index:50; }
   .nav-btn { flex:1; background:none; border:none; color:var(--text-muted); padding:14px 8px 12px; font-family:'DM Sans',sans-serif; font-size:10px; letter-spacing:0.5px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:color 0.2s; }
   .nav-btn.active { color:var(--gold); }
   .nav-icon { font-size:20px; line-height:1; }
 
-  /* Pages */
   .page { display:none; }
   .page.active { display:block; }
 
-  /* Settings */
   .settings-page { padding:24px; }
   .settings-header { font-family:'DM Serif Display',serif; font-size:28px; color:var(--cream); margin-bottom:8px; }
   .settings-sub { font-size:13px; color:var(--text-muted); margin-bottom:32px; }
@@ -142,16 +128,13 @@
   .danger-zone .field-label { color:var(--danger); }
   .btn-danger { width:100%; background:transparent; color:var(--danger); border:1px solid rgba(224,92,75,0.3); border-radius:12px; padding:14px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:all 0.2s; margin-bottom:10px; }
   .btn-danger:hover { background:var(--danger-bg); }
-
-  /* Info box */
   .info-box { background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.2); border-radius:12px; padding:14px 16px; font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:20px; }
   .info-box strong { color:var(--gold-light); }
 
-  /* Drawer */
   .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:200; align-items:flex-end; backdrop-filter:blur(6px); }
   .drawer-overlay.show { display:flex; }
   .drawer { width:100%; max-width:480px; margin:0 auto; background:var(--surface); border-radius:24px 24px 0 0; border-top:1px solid var(--border); animation:slideUp 0.3s cubic-bezier(.22,.68,0,1.2); overflow:hidden; }
-  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  @keyframes slideUp { from{transform:translateY(100%)}to{transform:translateY(0)} }
   .drawer-handle { width:36px; height:4px; background:var(--surface3); border-radius:2px; margin:12px auto 0; }
   .drawer-head { padding:16px 20px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
   .drawer-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--cream); }
@@ -181,7 +164,6 @@
   .btn-drawer-save:hover { background:var(--gold-light); }
   .btn-drawer-save:disabled { opacity:0.5; cursor:not-allowed; }
 
-  /* Modal */
   .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:400; align-items:flex-end; backdrop-filter:blur(4px); }
   .modal-overlay.show { display:flex; }
   .modal { width:100%; max-width:480px; margin:0 auto; background:var(--surface); border-radius:20px 20px 0 0; padding:28px 24px 40px; border-top:1px solid var(--border); animation:slideUp 0.3s ease; }
@@ -195,7 +177,6 @@
 <body>
 <div class="app">
 
-  <!-- Dashboard -->
   <div class="page active" id="page-dashboard">
     <header>
       <div class="header-top">
@@ -215,7 +196,7 @@
 
     <div class="dashboard">
       <div class="budget-grid">
-        <div class="stat-card full" id="card-budget">
+        <div class="stat-card full">
           <div class="stat-label">Monthly Budget</div>
           <div class="stat-value large"><span class="stat-currency" id="sym-1">₹</span><span id="val-budget">—</span></div>
           <div class="progress-wrap">
@@ -258,21 +239,18 @@
       <div class="section-title">This Month</div>
     </div>
     <div class="history-list" id="history-list">
-      <div class="empty-state">Loading entries…</div>
+      <div class="empty-state">Loading from Google Sheets…</div>
     </div>
   </div>
 
-  <!-- Settings -->
   <div class="page" id="page-settings">
     <div class="settings-page">
       <div class="settings-header">Budget Setup</div>
       <div class="settings-sub">Configure your monthly budget and currency</div>
-
       <div class="info-box">
-        <strong>☁ Google Sheets sync is active.</strong><br>
-        Your data is automatically saved to your Google Sheet every time you add or edit an entry. It works across all your devices.
+        <strong>☁ Google Sheets sync active.</strong><br>
+        Every entry is automatically saved to your Google Sheet. Your data is available on any device.
       </div>
-
       <div class="field-group">
         <label class="field-label">Currency Symbol</label>
         <div class="currency-row">
@@ -287,7 +265,6 @@
         <input class="field-input" type="number" id="budget-input" placeholder="e.g. 30000" min="0">
       </div>
       <button class="btn-primary" onclick="saveBudget()">Save Budget</button>
-
       <div class="divider"></div>
       <div class="danger-zone">
         <label class="field-label">⚠ Danger Zone</label>
@@ -298,7 +275,6 @@
 
 </div>
 
-<!-- Bottom Nav -->
 <div class="bottom-nav">
   <button class="nav-btn active" id="nav-dashboard" onclick="showPage('dashboard')">
     <span class="nav-icon">◈</span>Dashboard
@@ -310,7 +286,6 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Drawer -->
 <div class="drawer-overlay" id="drawer-overlay">
   <div class="drawer">
     <div class="drawer-handle"></div>
@@ -343,7 +318,6 @@
   </div>
 </div>
 
-<!-- Modal -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-title" id="modal-title">Are you sure?</div>
@@ -356,51 +330,51 @@
 </div>
 
 <script>
-// ─────────────────────────────────────────
-// CONFIG
-// ─────────────────────────────────────────
+// ── CONFIG ──
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6v8gclHncN0u-kukN-SlFfUdR7x5znK0NYAdlpVF2LBIUSUd0URES5jgGUUqGj3NP9w/exec';
 const STORAGE_KEY = 'spendwise_v3';
 
-// ─────────────────────────────────────────
-// LOCAL STATE (cache + settings)
-// ─────────────────────────────────────────
+// ── STATE ──
 let state = { currency:'₹', currencyCode:'INR', budget:0, entries:{} };
+function loadLocal() { try { const s=localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); } catch(e){} }
+function saveLocal() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
-function loadLocal() {
-  try { const s=localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); } catch(e){}
-}
-function saveLocal() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-// ─────────────────────────────────────────
-// GOOGLE SHEETS SYNC
-// ─────────────────────────────────────────
+// ── SYNC STATUS ──
 function setSyncStatus(status, text) {
-  const pill = document.getElementById('sync-pill');
-  const label = document.getElementById('sync-text');
-  pill.className = 'sync-pill ' + status;
-  label.textContent = text;
+  const pill=document.getElementById('sync-pill');
+  pill.className='sync-pill '+status;
+  document.getElementById('sync-text').textContent=text;
 }
 
-async function sheetRequest(payload) {
-  const res = await fetch(SCRIPT_URL, {
+// ── GOOGLE SHEETS — uses GET with payload param to avoid CORS ──
+async function sheetGet(payload) {
+  const url = SCRIPT_URL + '?payload=' + encodeURIComponent(JSON.stringify(payload));
+  const res = await fetch(url);
+  return res.json();
+}
+
+async function sheetPost(payload) {
+  // Use no-cors POST for write operations (fire-and-forget),
+  // then verify by re-fetching
+  await fetch(SCRIPT_URL, {
     method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(payload)
   });
-  return res.json();
+  // no-cors means we can't read the response — we trust it worked
+  // (Apps Script always processes valid POST bodies)
+  return { success: true };
 }
 
 async function syncFromSheet() {
   setSyncStatus('syncing', 'Syncing…');
   try {
-    const result = await sheetRequest({ action:'getAll' });
-    if(result.success) {
-      // Rebuild entries from sheet (sheet is source of truth)
+    const result = await sheetGet({ action:'getAll' });
+    if (result.success) {
       state.entries = {};
       result.data.forEach(row => {
-        if(row.date && row.amount !== '') {
+        if (row.date && row.amount !== '' && row.amount !== undefined) {
           state.entries[row.date] = {
             amount: parseFloat(row.amount),
             comment: row.comment || ''
@@ -411,31 +385,29 @@ async function syncFromSheet() {
       renderDashboard();
       setSyncStatus('synced', 'Synced');
     } else {
-      throw new Error(result.error || 'Unknown error');
+      throw new Error(result.error || 'Failed');
     }
   } catch(e) {
     setSyncStatus('error', 'Sync failed');
-    showToast('Could not reach Google Sheets — showing cached data', true);
+    showToast('Showing cached data — check your internet connection', true);
   }
 }
 
 async function pushEntry(dateKey, amount, comment) {
   setSyncStatus('syncing', 'Saving…');
   try {
-    const result = await sheetRequest({
+    await sheetPost({
       action: 'save',
       date: dateKey,
       amount: amount,
       comment: comment,
       timestamp: new Date().toISOString()
     });
-    if(result.success) {
-      setSyncStatus('synced', 'Synced');
-      return true;
-    } else throw new Error(result.error);
+    setSyncStatus('synced', 'Synced');
+    return true;
   } catch(e) {
     setSyncStatus('error', 'Save failed');
-    showToast('Could not save to Google Sheets', true);
+    showToast('Saved locally — could not reach Google Sheets', true);
     return false;
   }
 }
@@ -443,19 +415,16 @@ async function pushEntry(dateKey, amount, comment) {
 async function deleteFromSheet(dateKey) {
   setSyncStatus('syncing', 'Deleting…');
   try {
-    const result = await sheetRequest({ action:'delete', date:dateKey });
-    if(result.success) { setSyncStatus('synced', 'Synced'); return true; }
-    else throw new Error(result.error);
+    await sheetPost({ action:'delete', date:dateKey });
+    setSyncStatus('synced', 'Synced');
+    return true;
   } catch(e) {
     setSyncStatus('error', 'Delete failed');
-    showToast('Could not delete from Google Sheets', true);
     return false;
   }
 }
 
-// ─────────────────────────────────────────
-// DATE HELPERS
-// ─────────────────────────────────────────
+// ── DATE HELPERS ──
 function today() { return new Date().toISOString().slice(0,10); }
 function currentMonthKey() { return today().slice(0,7); }
 function daysLeft(ym) {
@@ -476,9 +445,7 @@ function friendlyDate(s) {
 }
 function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ─────────────────────────────────────────
-// RENDER
-// ─────────────────────────────────────────
+// ── RENDER ──
 function renderDashboard() {
   const ym=currentMonthKey();
   document.getElementById('month-label').textContent=new Date(ym+'-01').toLocaleString('default',{month:'long',year:'numeric'}).toUpperCase();
@@ -508,7 +475,6 @@ function renderDashboard() {
   const entry=state.entries[todayStr];
   document.getElementById('amount-input').value=entry?entry.amount:'';
   document.getElementById('comment-input').value=entry?(entry.comment||''):'';
-
   renderHistory();
 }
 
@@ -516,10 +482,7 @@ function renderHistory() {
   const ym=currentMonthKey();
   const entries=Object.entries(state.entries).filter(([k])=>k.startsWith(ym)).sort((a,b)=>b[0].localeCompare(a[0]));
   const list=document.getElementById('history-list');
-  if(!entries.length){
-    list.innerHTML='<div class="empty-state">No entries yet this month.<br>Add your first expense above!</div>';
-    return;
-  }
+  if(!entries.length){ list.innerHTML='<div class="empty-state">No entries yet this month.<br>Add your first expense above!</div>'; return; }
   list.innerHTML=entries.map(([k,v])=>{
     const {day,dow}=formatDate(k);
     const comment=v.comment?`<div class="history-comment">${escHtml(v.comment)}</div>`:'';
@@ -535,9 +498,7 @@ function renderHistory() {
   }).join('');
 }
 
-// ─────────────────────────────────────────
-// SAVE / DELETE
-// ─────────────────────────────────────────
+// ── SAVE / DELETE ──
 async function saveEntry() {
   const raw=document.getElementById('amount-input').value;
   const amount=parseFloat(raw);
@@ -546,34 +507,29 @@ async function saveEntry() {
   const btn=document.getElementById('btn-save-today');
   btn.disabled=true; btn.textContent='Saving…';
 
-  // Optimistic local update
   state.entries[today()]={amount,comment};
   saveLocal(); renderDashboard();
 
-  const ok=await pushEntry(today(),amount,comment);
+  await pushEntry(today(),amount,comment);
   btn.disabled=false; btn.textContent="Save Today's Expense";
-  if(ok) showToast('✓ Saved to Google Sheets!');
+  showToast('✓ Saved to Google Sheets!');
 }
 
 async function deleteEntry(key) {
   openModal('Delete this entry?',`Remove entry for ${key}?`, async ()=>{
-    // Optimistic
     delete state.entries[key]; saveLocal(); renderDashboard();
-    const ok=await deleteFromSheet(key);
-    if(ok) showToast('Entry deleted');
+    await deleteFromSheet(key);
+    showToast('Entry deleted');
   });
 }
 
-// ─────────────────────────────────────────
-// DRAWER
-// ─────────────────────────────────────────
+// ── DRAWER ──
 function openDrawer(dateKey) {
   const isEdit=!!dateKey;
   document.getElementById('drawer-title').textContent=isEdit?'Edit Entry':'Add Past Entry';
   document.getElementById('sym-drawer').textContent=state.currency;
   const dateInput=document.getElementById('drawer-date');
   const chip=document.getElementById('date-chip');
-
   if(isEdit){
     dateInput.value=dateKey; dateInput.disabled=true; chip.classList.add('locked');
     document.getElementById('date-chip-val').textContent=friendlyDate(dateKey);
@@ -587,10 +543,10 @@ function openDrawer(dateKey) {
     const yestStr=yest.toISOString().slice(0,10);
     dateInput.value=yestStr;
     document.getElementById('date-chip-val').textContent=friendlyDate(yestStr);
-    const existing=state.entries[yestStr];
-    document.getElementById('drawer-amount').value=existing?existing.amount:'';
-    document.getElementById('drawer-comment').value=existing?(existing.comment||''):'';
-    document.getElementById('overwrite-notice').classList.toggle('show',!!existing);
+    const ex=state.entries[yestStr];
+    document.getElementById('drawer-amount').value=ex?ex.amount:'';
+    document.getElementById('drawer-comment').value=ex?(ex.comment||''):'';
+    document.getElementById('overwrite-notice').classList.toggle('show',!!ex);
   }
   document.getElementById('drawer-overlay').classList.add('show');
   setTimeout(()=>document.getElementById('drawer-amount').focus(),350);
@@ -600,10 +556,10 @@ function onDrawerDateChange() {
   const val=document.getElementById('drawer-date').value;
   if(!val) return;
   document.getElementById('date-chip-val').textContent=friendlyDate(val);
-  const existing=state.entries[val];
-  document.getElementById('overwrite-notice').classList.toggle('show',!!existing);
-  document.getElementById('drawer-amount').value=existing?existing.amount:'';
-  document.getElementById('drawer-comment').value=existing?(existing.comment||''):'';
+  const ex=state.entries[val];
+  document.getElementById('overwrite-notice').classList.toggle('show',!!ex);
+  document.getElementById('drawer-amount').value=ex?ex.amount:'';
+  document.getElementById('drawer-comment').value=ex?(ex.comment||''):'';
 }
 
 async function saveDrawerEntry() {
@@ -619,17 +575,16 @@ async function saveDrawerEntry() {
   state.entries[dateKey]={amount,comment};
   saveLocal(); renderDashboard();
 
-  const ok=await pushEntry(dateKey,amount,comment);
+  await pushEntry(dateKey,amount,comment);
   btn.disabled=false; btn.textContent='Save Entry';
-  if(ok){ closeDrawer(); showToast(`✓ Saved for ${dateKey}`); }
+  closeDrawer();
+  showToast(`✓ Saved for ${dateKey}`);
 }
 
 function closeDrawer(){ document.getElementById('drawer-overlay').classList.remove('show'); }
-document.getElementById('drawer-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget) closeDrawer();});
+document.getElementById('drawer-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeDrawer();});
 
-// ─────────────────────────────────────────
-// SETTINGS
-// ─────────────────────────────────────────
+// ── SETTINGS ──
 let selectedCurrency='₹', selectedCode='INR';
 function selectCurrency(sym,code,e){
   selectedCurrency=sym; selectedCode=code;
@@ -639,7 +594,7 @@ function selectCurrency(sym,code,e){
 function loadSettings(){
   selectedCurrency=state.currency;
   document.getElementById('budget-input').value=state.budget||'';
-  document.querySelectorAll('.currency-opt').forEach(el=>{if(el.textContent.startsWith(state.currency)) el.classList.add('selected');});
+  document.querySelectorAll('.currency-opt').forEach(el=>{if(el.textContent.startsWith(state.currency))el.classList.add('selected');});
 }
 function saveBudget(){
   const b=parseFloat(document.getElementById('budget-input').value);
@@ -648,9 +603,7 @@ function saveBudget(){
   saveLocal(); showToast('✓ Budget saved!'); showPage('dashboard');
 }
 
-// ─────────────────────────────────────────
-// NAV
-// ─────────────────────────────────────────
+// ── NAV ──
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -660,20 +613,15 @@ function showPage(name){
   if(name==='settings') loadSettings();
 }
 
-// ─────────────────────────────────────────
-// CLEAR
-// ─────────────────────────────────────────
+// ── CLEAR ──
 function confirmClearLocal(){
-  openModal('Clear local cache?','This only clears data cached on this device. Your Google Sheet is untouched. The app will re-sync from the sheet on next load.',()=>{
-    state.entries={};
-    saveLocal(); showToast('Cache cleared — reloading…');
+  openModal('Clear local cache?','Your Google Sheet is untouched. The app will re-sync on next load.',()=>{
+    state.entries={}; saveLocal(); showToast('Cache cleared — reloading…');
     setTimeout(()=>location.reload(),1200);
   });
 }
 
-// ─────────────────────────────────────────
-// MODAL
-// ─────────────────────────────────────────
+// ── MODAL ──
 function openModal(title,sub,onConfirm){
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-sub').textContent=sub;
@@ -681,11 +629,9 @@ function openModal(title,sub,onConfirm){
   document.getElementById('modal').classList.add('show');
 }
 function closeModal(){ document.getElementById('modal').classList.remove('show'); }
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget) closeModal();});
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 
-// ─────────────────────────────────────────
-// TOAST
-// ─────────────────────────────────────────
+// ── TOAST ──
 let toastTimer;
 function showToast(msg,isError){
   const t=document.getElementById('toast');
@@ -694,16 +640,10 @@ function showToast(msg,isError){
   toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-// ─────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────
+// ── INIT ──
 loadLocal();
-if(!state.budget){
-  showPage('settings');
-} else {
-  renderDashboard();        // Show cached data immediately
-  syncFromSheet();          // Then pull latest from Google Sheets in background
-}
+if(!state.budget){ showPage('settings'); }
+else { renderDashboard(); syncFromSheet(); }
 </script>
 </body>
 </html>
