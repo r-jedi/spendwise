@@ -14,7 +14,6 @@
     --gold: #c9a84c;
     --gold-light: #e2c77a;
     --cream: #f0e8d8;
-    --muted: #7a7265;
     --danger: #e05c4b;
     --danger-bg: #2a1a17;
     --success: #6bab7e;
@@ -22,207 +21,181 @@
     --text: #f0e8d8;
     --text-muted: #8a8070;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:0; opacity:0.4; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 400;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
-
-  .app { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 100px; }
+  .app { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:0 0 100px; }
 
   /* Header */
-  header { padding: 32px 24px 20px; border-bottom: 1px solid var(--border); }
-  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
-  .app-name { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--gold); letter-spacing: -0.5px; }
-  .app-name em { font-style: italic; color: var(--gold-light); }
-  .month-badge { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
-  .settings-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--gold); padding: 8px 14px; border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; }
-  .settings-btn:hover { background: var(--surface3); }
+  header { padding:32px 24px 20px; border-bottom:1px solid var(--border); }
+  .header-top { display:flex; justify-content:space-between; align-items:flex-start; }
+  .app-name { font-family:'DM Serif Display',serif; font-size:28px; color:var(--gold); letter-spacing:-0.5px; }
+  .app-name em { font-style:italic; color:var(--gold-light); }
+  .month-badge { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-top:4px; }
+  .header-right { display:flex; gap:8px; align-items:center; }
+  .settings-btn { background:var(--surface2); border:1px solid var(--border); color:var(--gold); padding:8px 14px; border-radius:20px; font-family:'DM Sans',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s; }
+  .settings-btn:hover { background:var(--surface3); }
+
+  /* Sync indicator */
+  .sync-pill { display:flex; align-items:center; gap:5px; padding:6px 10px; border-radius:20px; font-size:11px; font-weight:600; letter-spacing:0.5px; border:1px solid; transition:all 0.4s; }
+  .sync-pill.synced { color:var(--success); border-color:rgba(107,171,126,0.3); background:rgba(107,171,126,0.08); }
+  .sync-pill.syncing { color:var(--gold); border-color:rgba(201,168,76,0.3); background:rgba(201,168,76,0.08); }
+  .sync-pill.error { color:var(--danger); border-color:rgba(224,92,75,0.3); background:rgba(224,92,75,0.08); }
+  .sync-pill.offline { color:var(--text-muted); border-color:rgba(138,128,112,0.2); background:transparent; }
+  .sync-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex-shrink:0; }
+  .sync-pill.syncing .sync-dot { animation:pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   /* Dashboard */
-  .dashboard { padding: 24px 24px 0; }
-  .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .dashboard { padding:24px 24px 0; }
+  .budget-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px 16px; position:relative; overflow:hidden; transition:all 0.3s; }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--gold),transparent); opacity:0.5; }
+  .stat-card.full { grid-column:1/-1; }
+  .stat-card.danger { background:var(--danger-bg); border-color:rgba(224,92,75,0.3); }
+  .stat-card.danger::before { background:linear-gradient(90deg,var(--danger),transparent); }
+  .stat-label { font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; }
+  .stat-value { font-family:'DM Serif Display',serif; font-size:26px; color:var(--cream); line-height:1; }
+  .stat-card.danger .stat-value { color:var(--danger); }
+  .stat-value.large { font-size:32px; }
+  .stat-currency { font-size:14px; color:var(--text-muted); font-family:'DM Sans',sans-serif; margin-right:2px; }
+  .stat-sub { font-size:11px; color:var(--text-muted); margin-top:6px; }
+  .progress-wrap { margin-top:16px; }
+  .progress-label { display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); margin-bottom:6px; }
+  .progress-track { height:4px; background:var(--surface3); border-radius:2px; overflow:hidden; }
+  .progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:2px; transition:width 0.6s ease; }
+  .progress-fill.danger { background:linear-gradient(90deg,var(--danger),#f08070); }
 
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px 16px; position: relative; overflow: hidden; transition: all 0.3s; }
-  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); opacity: 0.5; }
-  .stat-card.full { grid-column: 1 / -1; }
-  .stat-card.danger { background: var(--danger-bg); border-color: rgba(224,92,75,0.3); }
-  .stat-card.danger::before { background: linear-gradient(90deg, var(--danger), transparent); }
+  /* Section */
+  .section-header { display:flex; align-items:center; justify-content:space-between; padding:28px 24px 16px; }
+  .section-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--cream); }
+  .btn-add-past { background:var(--surface2); border:1px solid var(--border); color:var(--gold); padding:7px 13px; border-radius:20px; font-family:'DM Sans',sans-serif; font-size:12px; cursor:pointer; display:flex; align-items:center; gap:5px; transition:all 0.2s; white-space:nowrap; }
+  .btn-add-past:hover { background:var(--surface3); }
 
-  .stat-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-  .stat-value { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--cream); line-height: 1; }
-  .stat-card.danger .stat-value { color: var(--danger); }
-  .stat-value.large { font-size: 32px; }
-  .stat-currency { font-size: 14px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; margin-right: 2px; }
-  .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
-
-  .progress-wrap { margin-top: 16px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
-  .progress-track { height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 2px; transition: width 0.6s ease; }
-  .progress-fill.danger { background: linear-gradient(90deg, var(--danger), #f08070); }
-
-  /* Section headers */
-  .section-header { display: flex; align-items: center; justify-content: space-between; padding: 28px 24px 16px; }
-  .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--cream); }
-  .btn-add-past { background: var(--surface2); border: 1px solid var(--border); color: var(--gold); padding: 7px 13px; border-radius: 20px; font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: all 0.2s; white-space: nowrap; }
-  .btn-add-past:hover { background: var(--surface3); }
-
-  /* Today entry card */
-  .entry-card { margin: 0 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-  .entry-today { padding: 16px 18px; border-bottom: 1px solid var(--border); }
-  .entry-today-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
-  .amount-row { display: flex; align-items: center; gap: 8px; }
-  .currency-prefix { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--gold); }
-  .amount-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--cream); font-family: 'DM Serif Display', serif; font-size: 24px; padding: 10px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
-  .amount-input:focus { border-color: var(--gold); }
-  .amount-input::placeholder { color: var(--surface3); }
-  .comment-input { width: 100%; background: transparent; border: none; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 14px 18px; outline: none; resize: none; line-height: 1.5; }
-  .comment-input::placeholder { color: var(--surface3); }
-  .entry-footer { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
-  .btn-save { flex: 1; background: var(--gold); color: var(--bg); border: none; border-radius: 10px; padding: 13px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.3px; }
-  .btn-save:hover { background: var(--gold-light); }
-  .btn-save:active { transform: scale(0.98); }
+  /* Entry card */
+  .entry-card { margin:0 24px; background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .entry-today { padding:16px 18px; border-bottom:1px solid var(--border); }
+  .entry-today-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px; }
+  .amount-row { display:flex; align-items:center; gap:8px; }
+  .currency-prefix { font-family:'DM Serif Display',serif; font-size:22px; color:var(--gold); }
+  .amount-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:var(--cream); font-family:'DM Serif Display',serif; font-size:24px; padding:10px 14px; outline:none; transition:border-color 0.2s; width:100%; }
+  .amount-input:focus { border-color:var(--gold); }
+  .amount-input::placeholder { color:var(--surface3); }
+  .comment-input { width:100%; background:transparent; border:none; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:14px; padding:14px 18px; outline:none; resize:none; line-height:1.5; }
+  .comment-input::placeholder { color:var(--surface3); }
+  .entry-footer { padding:12px 18px; border-top:1px solid var(--border); }
+  .btn-save { width:100%; background:var(--gold); color:var(--bg); border:none; border-radius:10px; padding:13px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14px; cursor:pointer; transition:all 0.2s; }
+  .btn-save:hover { background:var(--gold-light); }
+  .btn-save:active { transform:scale(0.98); }
+  .btn-save:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
   /* Toast */
-  .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--success); color: #fff; padding: 10px 22px; border-radius: 30px; font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.3s; z-index: 300; white-space: nowrap; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--success); color:#fff; padding:10px 22px; border-radius:30px; font-size:13px; font-weight:500; opacity:0; transition:all 0.3s; z-index:300; white-space:nowrap; }
+  .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
   /* History */
-  .history-list { padding: 0 24px; }
-  .history-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .history-date { text-align: center; min-width: 38px; }
-  .history-day { font-size: 18px; font-weight: 600; color: var(--cream); line-height: 1; }
-  .history-dow { font-size: 10px; letter-spacing: 0.5px; color: var(--text-muted); text-transform: uppercase; }
-  .history-body { flex: 1; min-width: 0; }
-  .history-datestr { font-size: 12px; color: var(--text-muted); }
-  .history-comment { font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .history-amount { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--cream); white-space: nowrap; }
-  .history-actions { display: flex; gap: 2px; flex-shrink: 0; }
-  .history-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 15px; padding: 6px 7px; transition: all 0.2s; line-height: 1; border-radius: 8px; }
-  .history-btn:hover { color: var(--gold); background: var(--surface2); }
-  .history-btn.del:hover { color: var(--danger); background: var(--danger-bg); }
-  .empty-state { text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 14px; }
+  .history-list { padding:0 24px; }
+  .history-item { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.05); animation:fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .history-date { text-align:center; min-width:38px; }
+  .history-day { font-size:18px; font-weight:600; color:var(--cream); line-height:1; }
+  .history-dow { font-size:10px; letter-spacing:0.5px; color:var(--text-muted); text-transform:uppercase; }
+  .history-body { flex:1; min-width:0; }
+  .history-datestr { font-size:12px; color:var(--text-muted); }
+  .history-comment { font-size:13px; color:var(--text-muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .history-amount { font-family:'DM Serif Display',serif; font-size:20px; color:var(--cream); white-space:nowrap; }
+  .history-actions { display:flex; gap:2px; flex-shrink:0; }
+  .history-btn { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:15px; padding:6px 7px; transition:all 0.2s; border-radius:8px; }
+  .history-btn:hover { color:var(--gold); background:var(--surface2); }
+  .history-btn.del:hover { color:var(--danger); background:var(--danger-bg); }
+  .empty-state { text-align:center; padding:40px 0; color:var(--text-muted); font-size:14px; }
+
+  /* Loading skeleton */
+  .skeleton { background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:8px; height:16px; margin:6px 0; }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
   /* Bottom nav */
-  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(15,14,12,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border); display: flex; z-index: 50; }
-  .nav-btn { flex: 1; background: none; border: none; color: var(--text-muted); padding: 14px 8px 12px; font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.5px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; transition: color 0.2s; }
-  .nav-btn.active { color: var(--gold); }
-  .nav-icon { font-size: 20px; line-height: 1; }
+  .bottom-nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:rgba(15,14,12,0.95); backdrop-filter:blur(20px); border-top:1px solid var(--border); display:flex; z-index:50; }
+  .nav-btn { flex:1; background:none; border:none; color:var(--text-muted); padding:14px 8px 12px; font-family:'DM Sans',sans-serif; font-size:10px; letter-spacing:0.5px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:color 0.2s; }
+  .nav-btn.active { color:var(--gold); }
+  .nav-icon { font-size:20px; line-height:1; }
 
   /* Pages */
-  .page { display: none; }
-  .page.active { display: block; }
+  .page { display:none; }
+  .page.active { display:block; }
 
   /* Settings */
-  .settings-page { padding: 24px; }
-  .settings-header { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--cream); margin-bottom: 8px; }
-  .settings-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 32px; }
-  .field-group { margin-bottom: 20px; }
-  .field-label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
-  .field-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 16px; padding: 14px 16px; outline: none; transition: border-color 0.2s; }
-  .field-input:focus { border-color: var(--gold); }
-  .currency-row { display: flex; gap: 8px; }
-  .currency-opt { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text-muted); font-size: 15px; padding: 10px; cursor: pointer; transition: all 0.2s; font-family: 'DM Sans', sans-serif; text-align: center; }
-  .currency-opt.selected { background: var(--surface2); border-color: var(--gold); color: var(--gold); }
-  .btn-primary { width: 100%; background: var(--gold); color: var(--bg); border: none; border-radius: 12px; padding: 16px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 8px; transition: all 0.2s; }
-  .btn-primary:hover { background: var(--gold-light); }
-  .divider { height: 1px; background: var(--border); margin: 28px 0; }
-  .danger-zone .field-label { color: var(--danger); }
-  .btn-danger { width: 100%; background: transparent; color: var(--danger); border: 1px solid rgba(224,92,75,0.3); border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
-  .btn-danger:hover { background: var(--danger-bg); }
+  .settings-page { padding:24px; }
+  .settings-header { font-family:'DM Serif Display',serif; font-size:28px; color:var(--cream); margin-bottom:8px; }
+  .settings-sub { font-size:13px; color:var(--text-muted); margin-bottom:32px; }
+  .field-group { margin-bottom:20px; }
+  .field-label { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; display:block; }
+  .field-input { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:12px; color:var(--cream); font-family:'DM Sans',sans-serif; font-size:16px; padding:14px 16px; outline:none; transition:border-color 0.2s; }
+  .field-input:focus { border-color:var(--gold); }
+  .currency-row { display:flex; gap:8px; }
+  .currency-opt { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--text-muted); font-size:15px; padding:10px; cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; text-align:center; }
+  .currency-opt.selected { background:var(--surface2); border-color:var(--gold); color:var(--gold); }
+  .btn-primary { width:100%; background:var(--gold); color:var(--bg); border:none; border-radius:12px; padding:16px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:15px; cursor:pointer; margin-top:8px; transition:all 0.2s; }
+  .btn-primary:hover { background:var(--gold-light); }
+  .divider { height:1px; background:var(--border); margin:28px 0; }
+  .danger-zone .field-label { color:var(--danger); }
+  .btn-danger { width:100%; background:transparent; color:var(--danger); border:1px solid rgba(224,92,75,0.3); border-radius:12px; padding:14px; font-family:'DM Sans',sans-serif; font-weight:500; font-size:14px; cursor:pointer; transition:all 0.2s; margin-bottom:10px; }
+  .btn-danger:hover { background:var(--danger-bg); }
 
-  /* ── Edit / Add Past Entry Drawer ── */
-  .drawer-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 200;
-    align-items: flex-end;
-    backdrop-filter: blur(6px);
-  }
-  .drawer-overlay.show { display: flex; }
+  /* Info box */
+  .info-box { background:rgba(201,168,76,0.07); border:1px solid rgba(201,168,76,0.2); border-radius:12px; padding:14px 16px; font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:20px; }
+  .info-box strong { color:var(--gold-light); }
 
-  .drawer {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    background: var(--surface);
-    border-radius: 24px 24px 0 0;
-    border-top: 1px solid var(--border);
-    animation: slideUp 0.3s cubic-bezier(.22,.68,0,1.2);
-    overflow: hidden;
-  }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  /* Drawer */
+  .drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:200; align-items:flex-end; backdrop-filter:blur(6px); }
+  .drawer-overlay.show { display:flex; }
+  .drawer { width:100%; max-width:480px; margin:0 auto; background:var(--surface); border-radius:24px 24px 0 0; border-top:1px solid var(--border); animation:slideUp 0.3s cubic-bezier(.22,.68,0,1.2); overflow:hidden; }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .drawer-handle { width:36px; height:4px; background:var(--surface3); border-radius:2px; margin:12px auto 0; }
+  .drawer-head { padding:16px 20px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .drawer-title { font-family:'DM Serif Display',serif; font-size:20px; color:var(--cream); }
+  .drawer-close { background:var(--surface2); border:1px solid var(--border); color:var(--text-muted); width:30px; height:30px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .drawer-body { padding:20px 20px 8px; }
+  .date-native-wrap { position:relative; margin-bottom:16px; }
+  .date-chip { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; transition:border-color 0.2s; }
+  .date-chip:hover { border-color:var(--gold); }
+  .date-chip.locked { opacity:0.55; pointer-events:none; }
+  .date-chip-label { font-size:10px; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-muted); margin-bottom:3px; }
+  .date-chip-val { font-size:15px; color:var(--cream); font-weight:500; }
+  .date-chip-icon { font-size:18px; color:var(--gold); }
+  .date-native { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+  .overwrite-notice { background:rgba(201,168,76,0.08); border:1px solid rgba(201,168,76,0.25); border-radius:10px; padding:9px 14px; font-size:12px; color:var(--gold-light); margin-bottom:14px; display:none; }
+  .overwrite-notice.show { display:block; }
+  .drawer-amount-row { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .drawer-currency { font-family:'DM Serif Display',serif; font-size:26px; color:var(--gold); }
+  .drawer-amount-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--cream); font-family:'DM Serif Display',serif; font-size:28px; padding:12px 16px; outline:none; transition:border-color 0.2s; width:100%; }
+  .drawer-amount-input:focus { border-color:var(--gold); }
+  .drawer-amount-input::placeholder { color:var(--surface3); }
+  .drawer-comment { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; color:var(--text-muted); font-family:'DM Sans',sans-serif; font-size:14px; padding:12px 16px; outline:none; resize:none; line-height:1.5; transition:border-color 0.2s; margin-bottom:18px; }
+  .drawer-comment:focus { border-color:var(--gold); }
+  .drawer-comment::placeholder { color:var(--surface3); }
+  .drawer-actions { display:flex; gap:10px; padding-bottom:16px; }
+  .btn-drawer-cancel { flex:1; background:var(--surface2); border:1px solid var(--border); color:var(--text-muted); border-radius:12px; padding:14px; font-family:'DM Sans',sans-serif; font-size:14px; cursor:pointer; }
+  .btn-drawer-save { flex:2; background:var(--gold); border:none; color:var(--bg); border-radius:12px; padding:14px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14px; cursor:pointer; transition:background 0.2s; }
+  .btn-drawer-save:hover { background:var(--gold-light); }
+  .btn-drawer-save:disabled { opacity:0.5; cursor:not-allowed; }
 
-  .drawer-handle { width: 36px; height: 4px; background: var(--surface3); border-radius: 2px; margin: 12px auto 0; }
-  .drawer-head { padding: 16px 20px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .drawer-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--cream); }
-  .drawer-close { background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); width: 30px; height: 30px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-  .drawer-body { padding: 20px 20px 8px; }
-
-  /* Date picker — native input overlaid invisibly on the chip */
-  .date-native-wrap { position: relative; margin-bottom: 16px; }
-  .date-chip { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: border-color 0.2s; }
-  .date-chip:hover { border-color: var(--gold); }
-  .date-chip.locked { opacity: 0.55; pointer-events: none; }
-  .date-chip-label { font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
-  .date-chip-val { font-size: 15px; color: var(--cream); font-weight: 500; }
-  .date-chip-icon { font-size: 18px; color: var(--gold); }
-  .date-native { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-
-  .overwrite-notice { background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.25); border-radius: 10px; padding: 9px 14px; font-size: 12px; color: var(--gold-light); margin-bottom: 14px; display: none; }
-  .overwrite-notice.show { display: block; }
-
-  .drawer-amount-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .drawer-currency { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--gold); }
-  .drawer-amount-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; color: var(--cream); font-family: 'DM Serif Display', serif; font-size: 28px; padding: 12px 16px; outline: none; transition: border-color 0.2s; width: 100%; }
-  .drawer-amount-input:focus { border-color: var(--gold); }
-  .drawer-amount-input::placeholder { color: var(--surface3); }
-
-  .drawer-comment { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 12px 16px; outline: none; resize: none; line-height: 1.5; transition: border-color 0.2s; margin-bottom: 18px; }
-  .drawer-comment:focus { border-color: var(--gold); }
-  .drawer-comment::placeholder { color: var(--surface3); }
-
-  .drawer-actions { display: flex; gap: 10px; padding-bottom: 16px; }
-  .btn-drawer-cancel { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; }
-  .btn-drawer-save { flex: 2; background: var(--gold); border: none; color: var(--bg); border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; }
-  .btn-drawer-save:hover { background: var(--gold-light); }
-
-  /* Confirm Modal */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 400; align-items: flex-end; backdrop-filter: blur(4px); }
-  .modal-overlay.show { display: flex; }
-  .modal { width: 100%; max-width: 480px; margin: 0 auto; background: var(--surface); border-radius: 20px 20px 0 0; padding: 28px 24px 40px; border-top: 1px solid var(--border); animation: slideUp 0.3s ease; }
-  .modal-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 6px; color: var(--cream); }
-  .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
-  .modal-actions { display: flex; gap: 10px; }
-  .btn-cancel { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); border-radius: 10px; padding: 13px; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; }
-  .btn-confirm { flex: 1; background: var(--danger); border: none; color: #fff; border-radius: 10px; padding: 13px; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px; cursor: pointer; }
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:400; align-items:flex-end; backdrop-filter:blur(4px); }
+  .modal-overlay.show { display:flex; }
+  .modal { width:100%; max-width:480px; margin:0 auto; background:var(--surface); border-radius:20px 20px 0 0; padding:28px 24px 40px; border-top:1px solid var(--border); animation:slideUp 0.3s ease; }
+  .modal-title { font-family:'DM Serif Display',serif; font-size:22px; margin-bottom:6px; color:var(--cream); }
+  .modal-sub { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+  .modal-actions { display:flex; gap:10px; }
+  .btn-cancel { flex:1; background:var(--surface2); border:1px solid var(--border); color:var(--text-muted); border-radius:10px; padding:13px; font-family:'DM Sans',sans-serif; font-size:14px; cursor:pointer; }
+  .btn-confirm { flex:1; background:var(--danger); border:none; color:#fff; border-radius:10px; padding:13px; font-family:'DM Sans',sans-serif; font-weight:600; font-size:14px; cursor:pointer; }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- Dashboard Page -->
+  <!-- Dashboard -->
   <div class="page active" id="page-dashboard">
     <header>
       <div class="header-top">
@@ -230,7 +203,13 @@
           <div class="app-name">Spend<em>wise</em></div>
           <div class="month-badge" id="month-label">—</div>
         </div>
-        <button class="settings-btn" onclick="showPage('settings')">⚙ Budget</button>
+        <div class="header-right">
+          <div class="sync-pill offline" id="sync-pill">
+            <div class="sync-dot"></div>
+            <span id="sync-text">Offline</span>
+          </div>
+          <button class="settings-btn" onclick="showPage('settings')">⚙</button>
+        </div>
       </div>
     </header>
 
@@ -271,21 +250,29 @@
       </div>
       <textarea class="comment-input" id="comment-input" rows="2" placeholder="Any notes? (optional)"></textarea>
       <div class="entry-footer">
-        <button class="btn-save" onclick="saveEntry()">Save Today's Expense</button>
+        <button class="btn-save" id="btn-save-today" onclick="saveEntry()">Save Today's Expense</button>
       </div>
     </div>
 
     <div class="section-header" style="padding-bottom:4px;">
       <div class="section-title">This Month</div>
     </div>
-    <div class="history-list" id="history-list"></div>
+    <div class="history-list" id="history-list">
+      <div class="empty-state">Loading entries…</div>
+    </div>
   </div>
 
-  <!-- Settings Page -->
+  <!-- Settings -->
   <div class="page" id="page-settings">
     <div class="settings-page">
       <div class="settings-header">Budget Setup</div>
-      <div class="settings-sub">Set your monthly budget and currency</div>
+      <div class="settings-sub">Configure your monthly budget and currency</div>
+
+      <div class="info-box">
+        <strong>☁ Google Sheets sync is active.</strong><br>
+        Your data is automatically saved to your Google Sheet every time you add or edit an entry. It works across all your devices.
+      </div>
+
       <div class="field-group">
         <label class="field-label">Currency Symbol</label>
         <div class="currency-row">
@@ -300,11 +287,11 @@
         <input class="field-input" type="number" id="budget-input" placeholder="e.g. 30000" min="0">
       </div>
       <button class="btn-primary" onclick="saveBudget()">Save Budget</button>
+
       <div class="divider"></div>
       <div class="danger-zone">
         <label class="field-label">⚠ Danger Zone</label>
-        <button class="btn-danger" onclick="confirmClearMonth()">Clear this month's entries</button>
-        <button class="btn-danger" onclick="confirmClearAll()">Reset everything</button>
+        <button class="btn-danger" onclick="confirmClearLocal()">Clear local cache only</button>
       </div>
     </div>
   </div>
@@ -323,7 +310,7 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- ── Edit / Add Drawer ── -->
+<!-- Drawer -->
 <div class="drawer-overlay" id="drawer-overlay">
   <div class="drawer">
     <div class="drawer-handle"></div>
@@ -332,7 +319,6 @@
       <button class="drawer-close" onclick="closeDrawer()">×</button>
     </div>
     <div class="drawer-body">
-
       <div class="date-native-wrap">
         <div class="date-chip" id="date-chip">
           <div>
@@ -343,56 +329,142 @@
         </div>
         <input class="date-native" type="date" id="drawer-date" onchange="onDrawerDateChange()">
       </div>
-
-      <div class="overwrite-notice" id="overwrite-notice">
-        ✦ An entry already exists for this date — saving will replace it.
-      </div>
-
+      <div class="overwrite-notice" id="overwrite-notice">✦ An entry already exists for this date — saving will replace it.</div>
       <div class="drawer-amount-row">
         <span class="drawer-currency" id="sym-drawer">₹</span>
         <input class="drawer-amount-input" type="number" id="drawer-amount" placeholder="0" min="0" step="0.01">
       </div>
-
       <textarea class="drawer-comment" id="drawer-comment" rows="2" placeholder="Notes (optional)"></textarea>
-
       <div class="drawer-actions">
         <button class="btn-drawer-cancel" onclick="closeDrawer()">Cancel</button>
-        <button class="btn-drawer-save" onclick="saveDrawerEntry()">Save Entry</button>
+        <button class="btn-drawer-save" id="btn-drawer-save" onclick="saveDrawerEntry()">Save Entry</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Confirm Modal -->
+<!-- Modal -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-title" id="modal-title">Are you sure?</div>
     <div class="modal-sub" id="modal-sub">This cannot be undone.</div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-confirm" id="modal-confirm">Delete</button>
+      <button class="btn-confirm" id="modal-confirm">Confirm</button>
     </div>
   </div>
 </div>
 
 <script>
-// ── State ──
-let state = { currency:'₹', currencyCode:'INR', budget:0, entries:{} };
-const STORAGE_KEY = 'spendwise_v2';
-function load() { try { const s=localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); } catch(e){} }
-function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+// ─────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6v8gclHncN0u-kukN-SlFfUdR7x5znK0NYAdlpVF2LBIUSUd0URES5jgGUUqGj3NP9w/exec';
+const STORAGE_KEY = 'spendwise_v3';
 
-// ── Date helpers ──
+// ─────────────────────────────────────────
+// LOCAL STATE (cache + settings)
+// ─────────────────────────────────────────
+let state = { currency:'₹', currencyCode:'INR', budget:0, entries:{} };
+
+function loadLocal() {
+  try { const s=localStorage.getItem(STORAGE_KEY); if(s) state=JSON.parse(s); } catch(e){}
+}
+function saveLocal() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ─────────────────────────────────────────
+// GOOGLE SHEETS SYNC
+// ─────────────────────────────────────────
+function setSyncStatus(status, text) {
+  const pill = document.getElementById('sync-pill');
+  const label = document.getElementById('sync-text');
+  pill.className = 'sync-pill ' + status;
+  label.textContent = text;
+}
+
+async function sheetRequest(payload) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+async function syncFromSheet() {
+  setSyncStatus('syncing', 'Syncing…');
+  try {
+    const result = await sheetRequest({ action:'getAll' });
+    if(result.success) {
+      // Rebuild entries from sheet (sheet is source of truth)
+      state.entries = {};
+      result.data.forEach(row => {
+        if(row.date && row.amount !== '') {
+          state.entries[row.date] = {
+            amount: parseFloat(row.amount),
+            comment: row.comment || ''
+          };
+        }
+      });
+      saveLocal();
+      renderDashboard();
+      setSyncStatus('synced', 'Synced');
+    } else {
+      throw new Error(result.error || 'Unknown error');
+    }
+  } catch(e) {
+    setSyncStatus('error', 'Sync failed');
+    showToast('Could not reach Google Sheets — showing cached data', true);
+  }
+}
+
+async function pushEntry(dateKey, amount, comment) {
+  setSyncStatus('syncing', 'Saving…');
+  try {
+    const result = await sheetRequest({
+      action: 'save',
+      date: dateKey,
+      amount: amount,
+      comment: comment,
+      timestamp: new Date().toISOString()
+    });
+    if(result.success) {
+      setSyncStatus('synced', 'Synced');
+      return true;
+    } else throw new Error(result.error);
+  } catch(e) {
+    setSyncStatus('error', 'Save failed');
+    showToast('Could not save to Google Sheets', true);
+    return false;
+  }
+}
+
+async function deleteFromSheet(dateKey) {
+  setSyncStatus('syncing', 'Deleting…');
+  try {
+    const result = await sheetRequest({ action:'delete', date:dateKey });
+    if(result.success) { setSyncStatus('synced', 'Synced'); return true; }
+    else throw new Error(result.error);
+  } catch(e) {
+    setSyncStatus('error', 'Delete failed');
+    showToast('Could not delete from Google Sheets', true);
+    return false;
+  }
+}
+
+// ─────────────────────────────────────────
+// DATE HELPERS
+// ─────────────────────────────────────────
 function today() { return new Date().toISOString().slice(0,10); }
 function currentMonthKey() { return today().slice(0,7); }
 function daysLeft(ym) {
-  const [y,m] = ym.split('-').map(Number);
-  const lastDay = new Date(y,m,0).getDate();
-  return Math.max(lastDay - new Date().getDate() + 1, 1);
+  const [y,m]=ym.split('-').map(Number);
+  return Math.max(new Date(y,m,0).getDate()-new Date().getDate()+1,1);
 }
 function formatDate(s) {
-  const d = new Date(s+'T00:00:00');
-  return { day:d.getDate(), dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()] };
+  const d=new Date(s+'T00:00:00');
+  return {day:d.getDate(),dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]};
 }
 function fmt(n) {
   if(n>=100000) return (n/100000).toFixed(1)+'L';
@@ -404,60 +476,56 @@ function friendlyDate(s) {
 }
 function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ── Dashboard render ──
+// ─────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────
 function renderDashboard() {
-  const ym = currentMonthKey();
-  document.getElementById('month-label').textContent = new Date(ym+'-01').toLocaleString('default',{month:'long',year:'numeric'}).toUpperCase();
-  const todayStr = today();
-  document.getElementById('today-label').textContent = new Date(todayStr+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
-  ['sym-1','sym-2','sym-3','sym-entry'].forEach(id => document.getElementById(id).textContent = state.currency);
+  const ym=currentMonthKey();
+  document.getElementById('month-label').textContent=new Date(ym+'-01').toLocaleString('default',{month:'long',year:'numeric'}).toUpperCase();
+  const todayStr=today();
+  document.getElementById('today-label').textContent=new Date(todayStr+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+  ['sym-1','sym-2','sym-3','sym-entry'].forEach(id=>document.getElementById(id).textContent=state.currency);
 
-  let spent = 0;
-  Object.entries(state.entries).forEach(([k,v]) => { if(k.startsWith(ym)) spent += v.amount; });
+  let spent=0;
+  Object.entries(state.entries).forEach(([k,v])=>{ if(k.startsWith(ym)) spent+=v.amount; });
 
-  const budget = state.budget, remaining = budget-spent;
-  const dl = daysLeft(ym), dailyAlloc = dl>0 ? remaining/dl : 0;
-  const isRed = (dailyAlloc < budget/31) && !!budget;
+  const budget=state.budget, remaining=budget-spent;
+  const dl=daysLeft(ym), dailyAlloc=dl>0?remaining/dl:0;
+  const isRed=(dailyAlloc<budget/31)&&!!budget;
 
-  document.getElementById('val-budget').textContent = budget ? fmt(budget) : '—';
-  document.getElementById('val-remaining').textContent = budget ? fmt(remaining) : '—';
-  document.getElementById('val-daily').textContent = budget ? fmt(Math.max(dailyAlloc,0)) : '—';
-  document.getElementById('sub-spent').textContent = `${state.currency}${fmt(spent)} spent`;
-  document.getElementById('sub-days').textContent = `${dl} day${dl!==1?'s':''} left`;
+  document.getElementById('val-budget').textContent=budget?fmt(budget):'—';
+  document.getElementById('val-remaining').textContent=budget?fmt(remaining):'—';
+  document.getElementById('val-daily').textContent=budget?fmt(Math.max(dailyAlloc,0)):'—';
+  document.getElementById('sub-spent').textContent=`${state.currency}${fmt(spent)} spent`;
+  document.getElementById('sub-days').textContent=`${dl} day${dl!==1?'s':''} left`;
 
-  const pct = budget ? Math.min(100,(spent/budget)*100) : 0;
-  document.getElementById('pct-spent').textContent = pct.toFixed(0)+'%';
-  document.getElementById('progress-bar').style.width = pct+'%';
-  document.getElementById('progress-bar').classList.toggle('danger', isRed);
-  ['card-remaining','card-daily'].forEach(id => document.getElementById(id).classList.toggle('danger', isRed));
+  const pct=budget?Math.min(100,(spent/budget)*100):0;
+  document.getElementById('pct-spent').textContent=pct.toFixed(0)+'%';
+  document.getElementById('progress-bar').style.width=pct+'%';
+  document.getElementById('progress-bar').classList.toggle('danger',isRed);
+  ['card-remaining','card-daily'].forEach(id=>document.getElementById(id).classList.toggle('danger',isRed));
 
-  const entry = state.entries[todayStr];
-  document.getElementById('amount-input').value = entry ? entry.amount : '';
-  document.getElementById('comment-input').value = entry ? (entry.comment||'') : '';
+  const entry=state.entries[todayStr];
+  document.getElementById('amount-input').value=entry?entry.amount:'';
+  document.getElementById('comment-input').value=entry?(entry.comment||''):'';
 
   renderHistory();
 }
 
 function renderHistory() {
-  const ym = currentMonthKey();
-  const entries = Object.entries(state.entries).filter(([k])=>k.startsWith(ym)).sort((a,b)=>b[0].localeCompare(a[0]));
-  const list = document.getElementById('history-list');
-  if(!entries.length) {
+  const ym=currentMonthKey();
+  const entries=Object.entries(state.entries).filter(([k])=>k.startsWith(ym)).sort((a,b)=>b[0].localeCompare(a[0]));
+  const list=document.getElementById('history-list');
+  if(!entries.length){
     list.innerHTML='<div class="empty-state">No entries yet this month.<br>Add your first expense above!</div>';
     return;
   }
-  list.innerHTML = entries.map(([k,v]) => {
-    const {day,dow} = formatDate(k);
-    const comment = v.comment ? `<div class="history-comment">${escHtml(v.comment)}</div>` : '';
+  list.innerHTML=entries.map(([k,v])=>{
+    const {day,dow}=formatDate(k);
+    const comment=v.comment?`<div class="history-comment">${escHtml(v.comment)}</div>`:'';
     return `<div class="history-item">
-      <div class="history-date">
-        <div class="history-day">${day}</div>
-        <div class="history-dow">${dow}</div>
-      </div>
-      <div class="history-body">
-        <div class="history-datestr">${k}</div>
-        ${comment}
-      </div>
+      <div class="history-date"><div class="history-day">${day}</div><div class="history-dow">${dow}</div></div>
+      <div class="history-body"><div class="history-datestr">${k}</div>${comment}</div>
       <div class="history-amount">${state.currency}${fmt(v.amount)}</div>
       <div class="history-actions">
         <button class="history-btn" onclick="openDrawer('${k}')" title="Edit">✎</button>
@@ -467,107 +535,123 @@ function renderHistory() {
   }).join('');
 }
 
-// ── Today save ──
-function saveEntry() {
-  const raw = document.getElementById('amount-input').value;
-  const amount = parseFloat(raw);
-  if(!raw||isNaN(amount)||amount<0) { showToast('Please enter a valid amount',true); return; }
-  state.entries[today()] = { amount, comment: document.getElementById('comment-input').value.trim() };
-  save(); renderDashboard(); showToast('✓ Entry saved!');
+// ─────────────────────────────────────────
+// SAVE / DELETE
+// ─────────────────────────────────────────
+async function saveEntry() {
+  const raw=document.getElementById('amount-input').value;
+  const amount=parseFloat(raw);
+  if(!raw||isNaN(amount)||amount<0){showToast('Please enter a valid amount',true);return;}
+  const comment=document.getElementById('comment-input').value.trim();
+  const btn=document.getElementById('btn-save-today');
+  btn.disabled=true; btn.textContent='Saving…';
+
+  // Optimistic local update
+  state.entries[today()]={amount,comment};
+  saveLocal(); renderDashboard();
+
+  const ok=await pushEntry(today(),amount,comment);
+  btn.disabled=false; btn.textContent="Save Today's Expense";
+  if(ok) showToast('✓ Saved to Google Sheets!');
 }
 
-function deleteEntry(key) {
-  openModal('Delete this entry?', `Remove entry for ${key}?`, () => {
-    delete state.entries[key]; save(); renderDashboard(); showToast('Entry removed');
+async function deleteEntry(key) {
+  openModal('Delete this entry?',`Remove entry for ${key}?`, async ()=>{
+    // Optimistic
+    delete state.entries[key]; saveLocal(); renderDashboard();
+    const ok=await deleteFromSheet(key);
+    if(ok) showToast('Entry deleted');
   });
 }
 
-// ── Drawer (edit + past entry) ──
+// ─────────────────────────────────────────
+// DRAWER
+// ─────────────────────────────────────────
 function openDrawer(dateKey) {
-  const isEdit = !!dateKey;
-  document.getElementById('drawer-title').textContent = isEdit ? 'Edit Entry' : 'Add Past Entry';
-  document.getElementById('sym-drawer').textContent = state.currency;
+  const isEdit=!!dateKey;
+  document.getElementById('drawer-title').textContent=isEdit?'Edit Entry':'Add Past Entry';
+  document.getElementById('sym-drawer').textContent=state.currency;
+  const dateInput=document.getElementById('drawer-date');
+  const chip=document.getElementById('date-chip');
 
-  const dateInput = document.getElementById('drawer-date');
-  const chip = document.getElementById('date-chip');
-
-  if(isEdit) {
-    // Lock date when editing
-    dateInput.value = dateKey;
-    dateInput.disabled = true;
-    chip.classList.add('locked');
-    document.getElementById('date-chip-val').textContent = friendlyDate(dateKey);
-    const e = state.entries[dateKey]||{};
-    document.getElementById('drawer-amount').value = e.amount||'';
-    document.getElementById('drawer-comment').value = e.comment||'';
+  if(isEdit){
+    dateInput.value=dateKey; dateInput.disabled=true; chip.classList.add('locked');
+    document.getElementById('date-chip-val').textContent=friendlyDate(dateKey);
+    const e=state.entries[dateKey]||{};
+    document.getElementById('drawer-amount').value=e.amount||'';
+    document.getElementById('drawer-comment').value=e.comment||'';
     document.getElementById('overwrite-notice').classList.remove('show');
   } else {
-    // Default to yesterday for new past entry
-    dateInput.disabled = false;
-    chip.classList.remove('locked');
-    const yest = new Date(); yest.setDate(yest.getDate()-1);
-    const yestStr = yest.toISOString().slice(0,10);
-    dateInput.value = yestStr;
-    document.getElementById('date-chip-val').textContent = friendlyDate(yestStr);
-    const existing = state.entries[yestStr];
-    document.getElementById('drawer-amount').value = existing ? existing.amount : '';
-    document.getElementById('drawer-comment').value = existing ? (existing.comment||'') : '';
-    document.getElementById('overwrite-notice').classList.toggle('show', !!existing);
+    dateInput.disabled=false; chip.classList.remove('locked');
+    const yest=new Date(); yest.setDate(yest.getDate()-1);
+    const yestStr=yest.toISOString().slice(0,10);
+    dateInput.value=yestStr;
+    document.getElementById('date-chip-val').textContent=friendlyDate(yestStr);
+    const existing=state.entries[yestStr];
+    document.getElementById('drawer-amount').value=existing?existing.amount:'';
+    document.getElementById('drawer-comment').value=existing?(existing.comment||''):'';
+    document.getElementById('overwrite-notice').classList.toggle('show',!!existing);
   }
-
   document.getElementById('drawer-overlay').classList.add('show');
-  setTimeout(()=>document.getElementById('drawer-amount').focus(), 350);
+  setTimeout(()=>document.getElementById('drawer-amount').focus(),350);
 }
 
 function onDrawerDateChange() {
-  const val = document.getElementById('drawer-date').value;
+  const val=document.getElementById('drawer-date').value;
   if(!val) return;
-  document.getElementById('date-chip-val').textContent = friendlyDate(val);
-  const existing = state.entries[val];
-  document.getElementById('overwrite-notice').classList.toggle('show', !!existing);
-  if(existing) {
-    document.getElementById('drawer-amount').value = existing.amount;
-    document.getElementById('drawer-comment').value = existing.comment||'';
-  } else {
-    document.getElementById('drawer-amount').value = '';
-    document.getElementById('drawer-comment').value = '';
-  }
+  document.getElementById('date-chip-val').textContent=friendlyDate(val);
+  const existing=state.entries[val];
+  document.getElementById('overwrite-notice').classList.toggle('show',!!existing);
+  document.getElementById('drawer-amount').value=existing?existing.amount:'';
+  document.getElementById('drawer-comment').value=existing?(existing.comment||''):'';
 }
 
-function saveDrawerEntry() {
-  const dateKey = document.getElementById('drawer-date').value;
-  if(!dateKey) { showToast('Please select a date',true); return; }
-  const raw = document.getElementById('drawer-amount').value;
-  const amount = parseFloat(raw);
-  if(!raw||isNaN(amount)||amount<0) { showToast('Please enter a valid amount',true); return; }
-  state.entries[dateKey] = { amount, comment: document.getElementById('drawer-comment').value.trim() };
-  save(); closeDrawer(); renderDashboard(); showToast(`✓ Saved for ${dateKey}`);
+async function saveDrawerEntry() {
+  const dateKey=document.getElementById('drawer-date').value;
+  if(!dateKey){showToast('Please select a date',true);return;}
+  const raw=document.getElementById('drawer-amount').value;
+  const amount=parseFloat(raw);
+  if(!raw||isNaN(amount)||amount<0){showToast('Please enter a valid amount',true);return;}
+  const comment=document.getElementById('drawer-comment').value.trim();
+  const btn=document.getElementById('btn-drawer-save');
+  btn.disabled=true; btn.textContent='Saving…';
+
+  state.entries[dateKey]={amount,comment};
+  saveLocal(); renderDashboard();
+
+  const ok=await pushEntry(dateKey,amount,comment);
+  btn.disabled=false; btn.textContent='Save Entry';
+  if(ok){ closeDrawer(); showToast(`✓ Saved for ${dateKey}`); }
 }
 
-function closeDrawer() { document.getElementById('drawer-overlay').classList.remove('show'); }
-document.getElementById('drawer-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeDrawer(); });
+function closeDrawer(){ document.getElementById('drawer-overlay').classList.remove('show'); }
+document.getElementById('drawer-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget) closeDrawer();});
 
-// ── Settings ──
+// ─────────────────────────────────────────
+// SETTINGS
+// ─────────────────────────────────────────
 let selectedCurrency='₹', selectedCode='INR';
-function selectCurrency(sym,code,e) {
+function selectCurrency(sym,code,e){
   selectedCurrency=sym; selectedCode=code;
   document.querySelectorAll('.currency-opt').forEach(el=>el.classList.remove('selected'));
   e.target.classList.add('selected');
 }
-function loadSettings() {
+function loadSettings(){
   selectedCurrency=state.currency;
-  document.getElementById('budget-input').value = state.budget||'';
-  document.querySelectorAll('.currency-opt').forEach(el => { if(el.textContent.startsWith(state.currency)) el.classList.add('selected'); });
+  document.getElementById('budget-input').value=state.budget||'';
+  document.querySelectorAll('.currency-opt').forEach(el=>{if(el.textContent.startsWith(state.currency)) el.classList.add('selected');});
 }
-function saveBudget() {
-  const b = parseFloat(document.getElementById('budget-input').value);
-  if(isNaN(b)||b<=0) { showToast('Enter a valid budget',true); return; }
+function saveBudget(){
+  const b=parseFloat(document.getElementById('budget-input').value);
+  if(isNaN(b)||b<=0){showToast('Enter a valid budget',true);return;}
   state.budget=b; state.currency=selectedCurrency; state.currencyCode=selectedCode;
-  save(); showToast('✓ Budget saved!'); showPage('dashboard');
+  saveLocal(); showToast('✓ Budget saved!'); showPage('dashboard');
 }
 
-// ── Navigation ──
-function showPage(name) {
+// ─────────────────────────────────────────
+// NAV
+// ─────────────────────────────────────────
+function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
@@ -576,44 +660,50 @@ function showPage(name) {
   if(name==='settings') loadSettings();
 }
 
-// ── Clear ──
-function confirmClearMonth() {
-  openModal('Clear this month?','All entries for '+currentMonthKey()+' will be deleted.',()=>{
-    const ym=currentMonthKey();
-    Object.keys(state.entries).filter(k=>k.startsWith(ym)).forEach(k=>delete state.entries[k]);
-    save(); showToast('Month cleared'); showPage('dashboard');
-  });
-}
-function confirmClearAll() {
-  openModal('Reset everything?','Budget and all entries will be deleted.',()=>{
-    state={currency:'₹',currencyCode:'INR',budget:0,entries:{}};
-    save(); showToast('App reset'); showPage('settings');
+// ─────────────────────────────────────────
+// CLEAR
+// ─────────────────────────────────────────
+function confirmClearLocal(){
+  openModal('Clear local cache?','This only clears data cached on this device. Your Google Sheet is untouched. The app will re-sync from the sheet on next load.',()=>{
+    state.entries={};
+    saveLocal(); showToast('Cache cleared — reloading…');
+    setTimeout(()=>location.reload(),1200);
   });
 }
 
-// ── Modal ──
-function openModal(title,sub,onConfirm) {
+// ─────────────────────────────────────────
+// MODAL
+// ─────────────────────────────────────────
+function openModal(title,sub,onConfirm){
   document.getElementById('modal-title').textContent=title;
   document.getElementById('modal-sub').textContent=sub;
-  document.getElementById('modal-confirm').onclick=()=>{closeModal(); onConfirm&&onConfirm();};
+  document.getElementById('modal-confirm').onclick=()=>{closeModal();onConfirm&&onConfirm();};
   document.getElementById('modal').classList.add('show');
 }
-function closeModal() { document.getElementById('modal').classList.remove('show'); }
-document.getElementById('modal').addEventListener('click', e=>{if(e.target===e.currentTarget) closeModal();});
+function closeModal(){ document.getElementById('modal').classList.remove('show'); }
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget) closeModal();});
 
-// ── Toast ──
+// ─────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────
 let toastTimer;
-function showToast(msg,isError) {
+function showToast(msg,isError){
   const t=document.getElementById('toast');
   t.textContent=msg; t.style.background=isError?'var(--danger)':'var(--success)';
   t.classList.add('show'); clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-// ── Init ──
-load();
-if(!state.budget) showPage('settings');
-else renderDashboard();
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+loadLocal();
+if(!state.budget){
+  showPage('settings');
+} else {
+  renderDashboard();        // Show cached data immediately
+  syncFromSheet();          // Then pull latest from Google Sheets in background
+}
 </script>
 </body>
 </html>
